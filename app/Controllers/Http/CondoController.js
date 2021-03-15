@@ -1,93 +1,53 @@
-'use strict'
-
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
-/**
- * Resourceful controller for interacting with condos
- */
+"use strict";
+const Condo = use("App/Models/Condo");
+const Database = use("Database");
 class CondoController {
-  /**
-   * Show a list of all condos.
-   * GET condos
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async index({ response, auth }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
+
+    const condos = await Database.select().from("condos");
+    const indices = await Database.select().from("indices");
+    const providers = await Database.select().from("providers");
+    const services = await Database.select().from("services");
+    const events = await Database.select().from("events");
+    const residents = await Database.select().from("residents");
+    const debts = await Database.select().from("debts");
+
+    return { condos, indices, providers, services, events, residents, debts };
   }
 
-  /**
-   * Render a form to be used for creating a new condo.
-   * GET condos/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async store({ request, response, auth }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
+
+    const data = request.body;
+    const condo = await Condo.create(data);
+
+    return condo;
   }
 
-  /**
-   * Create/save a new condo.
-   * POST condos
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
+  async update({ request, response }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
+
+    const data = request.body;
+    await Condo.query().where("id", data.id).update(data);
+
+    const condo = await Condo.find(data.id);
+
+    return condo;
   }
 
-  /**
-   * Display a single condo.
-   * GET condos/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
+  async destroy({ request, response }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
 
-  /**
-   * Render a form to update an existing condo.
-   * GET condos/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
+    const data = request.body;
+    const condo = await Database.table("condos").where("id", data.id).delete();
 
-  /**
-   * Update condo details.
-   * PUT or PATCH condos/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a condo with id.
-   * DELETE condos/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    return condo;
   }
 }
 
-module.exports = CondoController
+module.exports = CondoController;
