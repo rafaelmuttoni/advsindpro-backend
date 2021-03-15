@@ -4,8 +4,8 @@
 const Model = use("Model");
 
 class Condo extends Model {
-  user() {
-    return this.belongsTo("App/Models/User");
+  services() {
+    return this.hasMany("App/Models/Services");
   }
 }
 
