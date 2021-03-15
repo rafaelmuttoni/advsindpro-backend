@@ -5,7 +5,7 @@ const Model = use("Model");
 
 class Provider extends Model {
   services() {
-    return this.hasMany("App/Models/Services");
+    return this.hasMany("App/Models/Service");
   }
 }
 

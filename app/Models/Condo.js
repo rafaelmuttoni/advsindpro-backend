@@ -5,7 +5,13 @@ const Model = use("Model");
 
 class Condo extends Model {
   services() {
-    return this.hasMany("App/Models/Services");
+    return this.hasMany("App/Models/Service");
+  }
+  events() {
+    return this.hasMany("App/Models/Event");
+  }
+  resident() {
+    return this.hasMany("App/Models/Resident");
   }
 }
 
