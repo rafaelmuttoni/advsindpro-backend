@@ -11,7 +11,9 @@ class CondoSchema extends Schema {
       table.string("code");
       table.text("address");
       table.date("initial_date");
-      table.json("extra");
+      table.string("energy");
+      table.string("water");
+      table.string("gas");
       table.timestamps();
     });
   }

@@ -27,7 +27,7 @@ class CondoController {
     return condo;
   }
 
-  async update({ request, response }) {
+  async update({ request, response, auth }) {
     const user = await auth.getUser();
     if (!user) return response.status(401);
 
