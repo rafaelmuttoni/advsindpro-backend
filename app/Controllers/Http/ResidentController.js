@@ -1,93 +1,40 @@
-'use strict'
-
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
-/**
- * Resourceful controller for interacting with residents
- */
+"use strict";
+const Resident = use("App/Models/Resident");
+const Database = use("Database");
 class ResidentController {
-  /**
-   * Show a list of all residents.
-   * GET residents
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async store({ request, response, auth }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
+
+    const data = request.body;
+    const resident = await Resident.create(data);
+
+    return resident;
   }
 
-  /**
-   * Render a form to be used for creating a new resident.
-   * GET residents/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async update({ request, response }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
+
+    const data = request.body;
+    await Resident.query().where("id", data.id).update(data);
+
+    const resident = await Resident.find(data.id);
+
+    return resident;
   }
 
-  /**
-   * Create/save a new resident.
-   * POST residents
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
-  }
+  async destroy({ request, response }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
 
-  /**
-   * Display a single resident.
-   * GET residents/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
+    const data = request.body;
+    const resident = await Database.table("residents")
+      .where("id", data.id)
+      .delete();
 
-  /**
-   * Render a form to update an existing resident.
-   * GET residents/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update resident details.
-   * PUT or PATCH residents/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a resident with id.
-   * DELETE residents/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    return resident;
   }
 }
 
-module.exports = ResidentController
+module.exports = ResidentController;

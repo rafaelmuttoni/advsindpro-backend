@@ -14,6 +14,10 @@ Route.post("/condos", "CondoController.store").middleware("auth");
 Route.patch("/condos", "CondoController.update").middleware("auth");
 Route.delete("/condos", "CondoController.destroy").middleware("auth");
 
+Route.post("/residents", "ResidentController.store").middleware("auth");
+Route.patch("/residents", "ResidentController.update").middleware("auth");
+Route.delete("/residents", "ResidentController.destroy").middleware("auth");
+
 Route.post("/debts", "DebtController.store").middleware("auth");
 Route.patch("/debts", "DebtController.update").middleware("auth");
 Route.delete("/debts", "DebtController.destroy").middleware("auth");
