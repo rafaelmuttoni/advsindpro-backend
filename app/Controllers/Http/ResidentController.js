@@ -12,7 +12,7 @@ class ResidentController {
     return resident;
   }
 
-  async update({ request, response }) {
+  async update({ request, response, auth }) {
     const user = await auth.getUser();
     if (!user) return response.status(401);
 
@@ -24,7 +24,7 @@ class ResidentController {
     return resident;
   }
 
-  async destroy({ request, response }) {
+  async destroy({ request, response, auth }) {
     const user = await auth.getUser();
     if (!user) return response.status(401);
 
