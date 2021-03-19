@@ -1,93 +1,40 @@
-'use strict'
-
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
-/**
- * Resourceful controller for interacting with providers
- */
+"use strict";
+const Provider = use("App/Models/Provider");
+const Database = use("Database");
 class ProviderController {
-  /**
-   * Show a list of all providers.
-   * GET providers
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async store({ request, response, auth }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
+
+    const data = request.body;
+    const provider = await Provider.create(data);
+
+    return provider;
   }
 
-  /**
-   * Render a form to be used for creating a new provider.
-   * GET providers/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async update({ request, response, auth }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
+
+    const data = request.body;
+    await Provider.query().where("id", data.id).update(data);
+
+    const provider = await Provider.find(data.id);
+
+    return provider;
   }
 
-  /**
-   * Create/save a new provider.
-   * POST providers
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
-  }
+  async destroy({ request, response, auth }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
 
-  /**
-   * Display a single provider.
-   * GET providers/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
+    const data = request.body;
+    const provider = await Database.table("providers")
+      .where("id", data.id)
+      .delete();
 
-  /**
-   * Render a form to update an existing provider.
-   * GET providers/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update provider details.
-   * PUT or PATCH providers/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a provider with id.
-   * DELETE providers/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    return provider;
   }
 }
 
-module.exports = ProviderController
+module.exports = ProviderController;

@@ -14,6 +14,7 @@ class ProviderSchema extends Schema {
       table.string("phone");
       table.string("email");
       table.text("description");
+      table.timestamps();
     });
   }
 

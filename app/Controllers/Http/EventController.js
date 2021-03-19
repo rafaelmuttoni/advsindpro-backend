@@ -1,93 +1,38 @@
-'use strict'
-
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
-/**
- * Resourceful controller for interacting with events
- */
+"use strict";
+const Event = use("App/Models/Event");
+const Database = use("Database");
 class EventController {
-  /**
-   * Show a list of all events.
-   * GET events
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async store({ request, response, auth }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
+
+    const data = request.body;
+    const event = await Event.create(data);
+
+    return event;
   }
 
-  /**
-   * Render a form to be used for creating a new event.
-   * GET events/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async update({ request, response, auth }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
+
+    const data = request.body;
+    await Event.query().where("id", data.id).update(data);
+
+    const event = await Event.find(data.id);
+
+    return event;
   }
 
-  /**
-   * Create/save a new event.
-   * POST events
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
-  }
+  async destroy({ request, response, auth }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
 
-  /**
-   * Display a single event.
-   * GET events/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
+    const data = request.body;
+    const event = await Database.table("events").where("id", data.id).delete();
 
-  /**
-   * Render a form to update an existing event.
-   * GET events/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update event details.
-   * PUT or PATCH events/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a event with id.
-   * DELETE events/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    return event;
   }
 }
 
-module.exports = EventController
+module.exports = EventController;

@@ -1,93 +1,40 @@
-'use strict'
-
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
-
-/**
- * Resourceful controller for interacting with services
- */
+"use strict";
+const Service = use("App/Models/Service");
+const Database = use("Database");
 class ServiceController {
-  /**
-   * Show a list of all services.
-   * GET services
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
+  async store({ request, response, auth }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
+
+    const data = request.body;
+    const service = await Service.create(data);
+
+    return service;
   }
 
-  /**
-   * Render a form to be used for creating a new service.
-   * GET services/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
+  async update({ request, response, auth }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
+
+    const data = request.body;
+    await Service.query().where("id", data.id).update(data);
+
+    const service = await Service.find(data.id);
+
+    return service;
   }
 
-  /**
-   * Create/save a new service.
-   * POST services
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
-  }
+  async destroy({ request, response, auth }) {
+    const user = await auth.getUser();
+    if (!user) return response.status(401);
 
-  /**
-   * Display a single service.
-   * GET services/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
+    const data = request.body;
+    const service = await Database.table("services")
+      .where("id", data.id)
+      .delete();
 
-  /**
-   * Render a form to update an existing service.
-   * GET services/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update service details.
-   * PUT or PATCH services/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a service with id.
-   * DELETE services/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+    return service;
   }
 }
 
-module.exports = ServiceController
+module.exports = ServiceController;
