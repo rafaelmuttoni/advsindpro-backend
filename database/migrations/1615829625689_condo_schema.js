@@ -7,7 +7,7 @@ class CondoSchema extends Schema {
   up() {
     this.create("condos", (table) => {
       table.increments();
-      table.string("name");
+      table.string("name").unique();
       table.string("code");
       table.text("address");
       table.date("initial_date");

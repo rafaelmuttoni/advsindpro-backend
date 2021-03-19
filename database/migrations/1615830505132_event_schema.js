@@ -8,7 +8,7 @@ class EventSchema extends Schema {
     this.create("events", (table) => {
       table.increments();
       table.string("name");
-      table.date("date");
+      table.datetime("date");
       table.string("description");
       table
         .integer("condo_id")

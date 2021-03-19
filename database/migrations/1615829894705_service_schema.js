@@ -8,7 +8,7 @@ class ServiceSchema extends Schema {
     this.create("services", (table) => {
       table.increments();
       table.string("name");
-      table.date("date");
+      table.datetime("date");
       table.float("price");
       table.text("description");
       table
