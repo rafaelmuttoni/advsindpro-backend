@@ -17,6 +17,7 @@ class DebtSchema extends Schema {
         .onDelete("CASCADE");
       table.date("due_date");
       table.float("price");
+      table.boolean("payment_status").defaultTo(false);
       table.text("description");
       table.timestamps();
     });
