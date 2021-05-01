@@ -9,7 +9,15 @@ class CondoSchema extends Schema {
       table.increments();
       table.string("name").unique();
       table.string("code");
-      table.text("address");
+      table.string("zipcode");
+      table.string("street");
+      table.string("building");
+      table.string("core");
+      table.string("block");
+      table.string("neighborhood");
+      table.string("city");
+      table.string("state");
+      table.string("manager");
       table.date("initial_date");
       table.string("energy");
       table.string("water");
