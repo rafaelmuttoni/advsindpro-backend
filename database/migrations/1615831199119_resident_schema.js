@@ -10,6 +10,7 @@ class ResidentSchema extends Schema {
       table.string("name");
       table.string("document");
       table.text("address");
+      table.string("apartment");
       table.string("email");
       table.string("phone");
       table.text("description");
