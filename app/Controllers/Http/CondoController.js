@@ -7,14 +7,13 @@ class CondoController {
     if (!user) return response.status(401);
 
     const condos = await Database.select().from("condos");
-    const indices = await Database.select().from("indices");
     const providers = await Database.select().from("providers");
     const services = await Database.select().from("services");
     const events = await Database.select().from("events");
     const residents = await Database.select().from("residents");
     const debts = await Database.select().from("debts");
 
-    return { condos, indices, providers, services, events, residents, debts };
+    return { condos, providers, services, events, residents, debts };
   }
 
   async store({ request, response, auth }) {
