@@ -9,6 +9,7 @@ class EventSchema extends Schema {
       table.increments();
       table.string("name");
       table.datetime("date");
+      table.float("priority");
       table.string("description");
       table
         .integer("condo_id")

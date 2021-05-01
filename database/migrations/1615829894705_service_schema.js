@@ -10,6 +10,7 @@ class ServiceSchema extends Schema {
       table.string("name");
       table.datetime("date");
       table.float("price");
+      table.float("priority");
       table.text("description");
       table
         .integer("condo_id")
