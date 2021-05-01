@@ -7,7 +7,7 @@ class DebtSchema extends Schema {
   up() {
     this.create("debts", (table) => {
       table.increments();
-      table.string("title"); // e.g. 03/21
+      table.string("title");
       table
         .integer("resident_id")
         .unsigned()
