@@ -10,7 +10,7 @@ class UserController {
   }
 
   async create({ request }) {
-    const data = request.only(["username", "email", "password"]);
+    const data = request.only(["name", "oab", "email", "password", "is_admin"]);
 
     const user = await User.create(data);
 
