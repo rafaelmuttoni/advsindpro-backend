@@ -22,6 +22,8 @@ class CondoSchema extends Schema {
       table.string("energy");
       table.string("water");
       table.string("gas");
+      table.string("gas_name");
+      table.string("gas_phone");
       table.timestamps();
     });
   }
