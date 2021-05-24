@@ -38,7 +38,7 @@ class CondoController {
     return condo;
   }
 
-  async destroy({ request, response }) {
+  async destroy({ auth, request, response }) {
     const user = await auth.getUser();
     if (!user) return response.status(401);
 
